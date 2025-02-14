@@ -10,35 +10,6 @@
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <title>Mid-Term Felipe Camargo</title>
 
-    <script>
-    async function getInstanceId() {
-        try {
-            const tokenResponse = await fetch("http://169.254.169.254/latest/api/token", {
-                method: "PUT",
-                headers: {
-                    "X-aws-ec2-metadata-token-ttl-seconds": "21600"
-                }
-            });
-            if (!tokenResponse.ok) throw new Error("Failed to get token");
-            const token = await tokenResponse.text();
-            const instanceResponse = await fetch("http://169.254.169.254/latest/meta-data/instance-id", {
-                headers: {
-                    "X-aws-ec2-metadata-token": token
-                }
-            });
-            if (!instanceResponse.ok) throw new Error("Failed to get instance-id");
-            const instanceId = await instanceResponse.text();
-            console.log("Instance ID:", instanceId);
-            document.getElementById("public-ip").innerHTML = instanceId;
-        } catch (error) {
-            console.error("Error fetching instance ID:", error);
-        }
-    }
-
-    // Chama a função
-    getInstanceId();
-    </script>
-
     <style>
     * {
         font-family: 'Poppins', sans-serif;
@@ -50,15 +21,25 @@
     <main class="max-w-3xl mx-auto p-12 pt-6 space-y-4 bg-white shadow-xl rounded-lg">
         <h1 class="text-3xl font-bold text-center text-blue-600">Mid-Term Exam Felipe Franco de Camargo</h1>
         <h3 class="text-xl text-center">Welcome to the Mathematical Application!</h3>
-        <div class="flex flex-col gap-2 text-center">
-            <p>
-                This application is hosted on my EC2 instance with Public IP:
-                <span id="public-ip" class="font-mono text-blue-500 bg-slate-300 rounded-lg px-2 py-1"></span>
-            </p>
-            <p>Enter Two numbers and select an operation to calculate the result</p>
-        </div>
         <form action="process_math.php" method="POST"
             class="shadow-lg rounded-lg px-8 py-6 bg-slate-50 flex flex-col gap-6">
+            <div class="flex flex-col gap-2 text-center">
+                <p>
+                    This application is hosted on my EC2 instance with Public IP:
+                    <span id="public-ip" class="font-mono text-blue-500 bg-slate-300 rounded-lg px-2 py-1">
+                        <?php
+                    $token = shell_exec("curl -X PUT -H 'X-aws-ec2-metadata-token-ttl-seconds: 21600' http://169.254.169.254/latest/api/token");
+                    if ($token) {
+                        $public_ip = shell_exec("curl -H 'X-aws-ec2-metadata-token: $token' http://169.254.169.254/latest/meta-data/public-ipv4");
+                        echo $public_ip ? $public_ip : "Unavailable";
+                    } else {
+                        echo "Unavailable";
+                    }
+                    ?>
+                    </span>
+                </p>
+                <p>Enter Two numbers and select an operation to calculate the result</p>
+            </div>
             <div class="flex items-center gap-4 w-full">
                 <label for="num1" class="w-1/4 text-right">First number: </label>
                 <input
@@ -76,10 +57,10 @@
                 <select
                     class="border border-slate-400 px-4 py-2 rounded-lg w-3/4 focus:outline-none focus:ring-1 focus:ring-blue-400"
                     name="oper" id="oper" required>
-                    <option value="Addition">Addition</option>
-                    <option value="Subtraction">Subtraction</option>
-                    <option value="Multiplication">Multiplication</option>
-                    <option value="Division">Division</option>
+                    <option value="addition">Addition</option>
+                    <option value="subtraction">Subtraction</option>
+                    <option value="multiplication">Multiplication</option>
+                    <option value="division">Division</option>
                 </select>
             </div>
 
