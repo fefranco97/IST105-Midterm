@@ -34,8 +34,9 @@ style = """* {
       
 function = """try {
           const response = await fetch('https://api.ipify.org/')
-          const publicIP = await response.json()
+          const publicIP = await response.text()
           document.getElementById('public-ip').innerHTML = publicIP
+          document.getElementById('loadBalancer-url').innerHTML = window.location.href
         } catch (error) {
           console.error('Error fetching IP:', error)
         }"""
@@ -79,7 +80,7 @@ print(f"""
           <li>Result: {result}</li>
         </ul>
       </div>
-      <footer>
+      <footer class="space-y-2">
         <p>
           This result was processsed on my EC2 instance with Public IP:
           <span id="public-ip" class="font-mono text-blue-500 bg-slate-300 rounded-lg px-2 py-1">127.0.0.1</span>

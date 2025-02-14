@@ -14,7 +14,7 @@
     async function getInstancePublicIP() {
         try {
             const response = await fetch('https://api.ipify.org/')
-            const publicIP = await response.json()
+            const publicIP = await response.text()
             document.getElementById('public-ip').innerHTML = publicIP
         } catch (error) {
             console.error('Error fetching IP:', error)
