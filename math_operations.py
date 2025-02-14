@@ -6,13 +6,13 @@ oper = sys.argv[3]
 public_ip = sys.argv[4]
 
 def perform_operation(num1, num2, oper):
-    if oper == 'Addition':
+    if oper == 'addition':
         result = num1 + num2
-    elif oper == 'Subtraction':
+    elif oper == 'subtraction':
         result = num1 - num2
-    elif oper == 'Multiplication':
+    elif oper == 'multiplication':
         result = num1 * num2
-    elif oper == 'Division':
+    elif oper == 'division':
         if num2 != 0:
             result = num1 / num2
         else:
@@ -36,6 +36,7 @@ style = """* {
 function = """
         window.onload = () => {
             document.getElementById("loadBalancer-url").innerHTML = window.location.href;
+        };
         """
 
 print(f"""
@@ -51,9 +52,7 @@ print(f"""
     <title>Mid-Term Felipe Camargo</title>
 
     <script>
-      {{
-          {function}
-      }}
+      {function}
     </script>
 
     <style>
@@ -75,11 +74,11 @@ print(f"""
       </div>
       <footer class="space-y-2">
         <p>
-          This result was processsed on my EC2 instance with Public IP:
+          This result was processed on my EC2 instance with Public IP:
           <span id="public-ip" class="font-mono text-blue-500 bg-slate-300 rounded-lg px-2 py-1">{public_ip}</span>
         </p>
         <p>
-          Acces the application via Load Balancer URL:
+          Access the application via Load Balancer URL:
           <span id="loadBalancer-url" class="font-mono text-blue-500 bg-slate-300 rounded-lg px-2 py-1"></span>
         </p>
       </footer>

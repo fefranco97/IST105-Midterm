@@ -24,19 +24,19 @@
         <form action="process_math.php" method="POST"
             class="shadow-lg rounded-lg px-8 py-6 bg-slate-50 flex flex-col gap-6">
             <div class="flex flex-col gap-2 text-center">
-                <p>
+                <p class="flex gap-2 items-center justify-center">
                     This application is hosted on my EC2 instance with Public IP:
-                    <span id="public-ip" class="font-mono text-blue-500 bg-slate-300 rounded-lg px-2 py-1">
-                        <?php
+                    <input id="public_ip" name="public_ip"
+                        class="font-mono text-blue-500 bg-slate-300 rounded-lg px-2 py-1 inline-block focus:outline-none"
+                        readonly value="<?php
                     $token = shell_exec("curl -X PUT -H 'X-aws-ec2-metadata-token-ttl-seconds: 21600' http://169.254.169.254/latest/api/token");
                     if ($token) {
                         $public_ip = shell_exec("curl -H 'X-aws-ec2-metadata-token: $token' http://169.254.169.254/latest/meta-data/public-ipv4");
-                        echo $public_ip ? $public_ip : "Unavailable";
+                        echo $public_ip ? $public_ip : 'Unavailable';
                     } else {
-                        echo "Unavailable";
+                        echo 'Unavailable';
                     }
-                    ?>
-                    </span>
+                    ?>">
                 </p>
                 <p>Enter Two numbers and select an operation to calculate the result</p>
             </div>
