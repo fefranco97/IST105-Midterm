@@ -3,6 +3,7 @@ import sys
 num1 = int(sys.argv[1])
 num2 = int(sys.argv[2])
 oper = sys.argv[3]
+public_ip = sys.argv[4]
 
 def perform_operation(num1, num2, oper):
     if oper == 'addition':
@@ -32,14 +33,11 @@ style = """* {
         font-family: 'Poppins', sans-serif;
       }"""
       
-function = """try {
-          const response = await fetch('http://169.254.169.254/latest/meta-data/public-ipv4')
-          const publicIP = await response.text()
-          console.log('Instance Public IP:', publicIP)
-          document.getElementById('public-ip').innerHTML = publicIP
-        } catch (error) {
-          console.error('Error fetching IP:', error)
-        }"""
+function = """
+        window.onload = () => {
+            document.getElementById("loadBalancer-url").innerHTML = window.location.href;
+        };
+        """
 
 print(f"""
 <!DOCTYPE html>
@@ -54,13 +52,7 @@ print(f"""
     <title>Mid-Term Felipe Camargo</title>
 
     <script>
-      async function getInstancePublicIP() {{
-        {function}
-      }}
-
-      getInstancePublicIP()
-
-      document.getElementById('loadBalancer-url').innerHTML = window.location.href
+      {function}
     </script>
 
     <style>
@@ -80,14 +72,14 @@ print(f"""
           <li>Result: {result}</li>
         </ul>
       </div>
-      <footer>
+      <footer class="space-y-2">
         <p>
-          This result was processsed on my EC2 instance with Public IP:
-          <span id="public-ip" class="font-mono text-blue-500 bg-slate-300 rounded-lg px-2 py-1">127.0.0.1</span>
+          This result was processed on my EC2 instance with Public IP:
+          <span id="public-ip" class="font-mono text-blue-500 bg-slate-300 rounded-lg px-2 py-1">{public_ip}</span>
         </p>
         <p>
-          Acces the application via Load Balancer URL:
-          <span id="loadBalancer-url" class="font-mono text-blue-500 bg-slate-300 rounded-lg px-2 py-1">127.0.0.1</span>
+          Access the application via Load Balancer URL:
+          <span id="loadBalancer-url" class="font-mono text-blue-500 bg-slate-300 rounded-lg px-2 py-1"></span>
         </p>
       </footer>
     </main>

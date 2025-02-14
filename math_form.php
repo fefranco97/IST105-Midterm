@@ -10,21 +10,6 @@
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <title>Mid-Term Felipe Camargo</title>
 
-    <script>
-    async function getInstancePublicIP() {
-        try {
-            const response = await fetch('http://169.254.169.254/latest/meta-data/public-ipv4')
-            const publicIP = await response.text()
-            console.log('Instance Public IP:', publicIP)
-            document.getElementById('public-ip').innerHTML = publicIP
-        } catch (error) {
-            console.error('Error fetching IP:', error)
-        }
-    }
-
-    getInstancePublicIP()
-    </script>
-
     <style>
     * {
         font-family: 'Poppins', sans-serif;
@@ -36,15 +21,25 @@
     <main class="max-w-3xl mx-auto p-12 pt-6 space-y-4 bg-white shadow-xl rounded-lg">
         <h1 class="text-3xl font-bold text-center text-blue-600">Mid-Term Exam Felipe Franco de Camargo</h1>
         <h3 class="text-xl text-center">Welcome to the Mathematical Application!</h3>
-        <div class="flex flex-col gap-2 text-center">
-            <p>
-                This application is hosted on my EC2 instance with Public IP:
-                <span id="public-ip" class="font-mono text-blue-500 bg-slate-300 rounded-lg px-2 py-1">127.0.0.1</span>
-            </p>
-            <p>Enter Two numbers and select an operation to calculate the result</p>
-        </div>
         <form action="process_math.php" method="POST"
             class="shadow-lg rounded-lg px-8 py-6 bg-slate-50 flex flex-col gap-6">
+            <div class="flex flex-col gap-2 text-center">
+                <p class="flex gap-2 items-center justify-center">
+                    This application is hosted on my EC2 instance with Public IP:
+                    <input id="public_ip" name="public_ip"
+                        class="font-mono text-blue-500 bg-slate-300 rounded-lg px-2 py-1 inline-block focus:outline-none"
+                        readonly value="<?php
+                    $token = shell_exec("curl -X PUT -H 'X-aws-ec2-metadata-token-ttl-seconds: 21600' http://169.254.169.254/latest/api/token");
+                    if ($token) {
+                        $public_ip = shell_exec("curl -H 'X-aws-ec2-metadata-token: $token' http://169.254.169.254/latest/meta-data/public-ipv4");
+                        echo $public_ip ? $public_ip : 'Unavailable';
+                    } else {
+                        echo 'Unavailable';
+                    }
+                    ?>">
+                </p>
+                <p>Enter Two numbers and select an operation to calculate the result</p>
+            </div>
             <div class="flex items-center gap-4 w-full">
                 <label for="num1" class="w-1/4 text-right">First number: </label>
                 <input
@@ -62,10 +57,10 @@
                 <select
                     class="border border-slate-400 px-4 py-2 rounded-lg w-3/4 focus:outline-none focus:ring-1 focus:ring-blue-400"
                     name="oper" id="oper" required>
-                    <option value="add">Addition</option>
-                    <option value="subtract">Subtraction</option>
-                    <option value="multiply">Multiplication</option>
-                    <option value="divide">Division</option>
+                    <option value="addition">Addition</option>
+                    <option value="subtraction">Subtraction</option>
+                    <option value="multiplication">Multiplication</option>
+                    <option value="division">Division</option>
                 </select>
             </div>
 
