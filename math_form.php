@@ -10,6 +10,35 @@
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <title>Mid-Term Felipe Camargo</title>
 
+    <script>
+    async function getInstanceId() {
+        try {
+            const tokenResponse = await fetch("http://169.254.169.254/latest/api/token", {
+                method: "PUT",
+                headers: {
+                    "X-aws-ec2-metadata-token-ttl-seconds": "21600"
+                }
+            });
+            if (!tokenResponse.ok) throw new Error("Failed to get token");
+            const token = await tokenResponse.text();
+            const instanceResponse = await fetch("http://169.254.169.254/latest/meta-data/instance-id", {
+                headers: {
+                    "X-aws-ec2-metadata-token": token
+                }
+            });
+            if (!instanceResponse.ok) throw new Error("Failed to get instance-id");
+            const instanceId = await instanceResponse.text();
+            console.log("Instance ID:", instanceId);
+            document.getElementById("public-ip").innerHTML = instanceId;
+        } catch (error) {
+            console.error("Error fetching instance ID:", error);
+        }
+    }
+
+    // Chama a função
+    getInstanceId();
+    </script>
+
     <style>
     * {
         font-family: 'Poppins', sans-serif;
@@ -24,12 +53,7 @@
         <div class="flex flex-col gap-2 text-center">
             <p>
                 This application is hosted on my EC2 instance with Public IP:
-                <span id="public-ip" class="font-mono text-blue-500 bg-slate-300 rounded-lg px-2 py-1">
-                    <?php
-                        $public_ip = file_get_contents("http://169.254.169.254/latest/meta-data/public-ipv4");
-                        echo $public_ip ? $public_ip : "Unavailable";
-                    ?>
-                </span>
+                <span id="public-ip" class="font-mono text-blue-500 bg-slate-300 rounded-lg px-2 py-1"></span>
             </p>
             <p>Enter Two numbers and select an operation to calculate the result</p>
         </div>
