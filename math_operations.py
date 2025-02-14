@@ -5,13 +5,13 @@ num2 = int(sys.argv[2])
 oper = sys.argv[3]
 
 def perform_operation(num1, num2, oper):
-    if oper == 'addition':
+    if oper == 'Addition':
         result = num1 + num2
-    elif oper == 'subtraction':
+    elif oper == 'Subtraction':
         result = num1 - num2
-    elif oper == 'multiplication':
+    elif oper == 'Multiplication':
         result = num1 * num2
-    elif oper == 'division':
+    elif oper == 'Division':
         if num2 != 0:
             result = num1 / num2
         else:
@@ -33,9 +33,8 @@ style = """* {
       }"""
       
 function = """try {
-          const response = await fetch('http://169.254.169.254/latest/meta-data/public-ipv4')
-          const publicIP = await response.text()
-          console.log('Instance Public IP:', publicIP)
+          const response = await fetch('https://api.ipify.org/')
+          const publicIP = await response.json()
           document.getElementById('public-ip').innerHTML = publicIP
         } catch (error) {
           console.error('Error fetching IP:', error)

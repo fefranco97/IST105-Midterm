@@ -13,9 +13,8 @@
     <script>
     async function getInstancePublicIP() {
         try {
-            const response = await fetch('http://169.254.169.254/latest/meta-data/public-ipv4')
-            const publicIP = await response.text()
-            console.log('Instance Public IP:', publicIP)
+            const response = await fetch('https://api.ipify.org/')
+            const publicIP = await response.json()
             document.getElementById('public-ip').innerHTML = publicIP
         } catch (error) {
             console.error('Error fetching IP:', error)
@@ -62,10 +61,10 @@
                 <select
                     class="border border-slate-400 px-4 py-2 rounded-lg w-3/4 focus:outline-none focus:ring-1 focus:ring-blue-400"
                     name="oper" id="oper" required>
-                    <option value="add">Addition</option>
-                    <option value="subtract">Subtraction</option>
-                    <option value="multiply">Multiplication</option>
-                    <option value="divide">Division</option>
+                    <option value="Addition">Addition</option>
+                    <option value="Subtraction">Subtraction</option>
+                    <option value="Multiplication">Multiplication</option>
+                    <option value="Division">Division</option>
                 </select>
             </div>
 
